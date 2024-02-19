@@ -1,0 +1,11 @@
+.mn_full_page{
+    width: 100%;
+    height: calc(100vh - 100px);
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+}
+
+.mn_full_page > div{
+    height: 100%;
+    overflow: auto;
+}
