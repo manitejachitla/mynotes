@@ -15,7 +15,6 @@ const CurrentNote=async ({params})=>{
     let finalPath=decodeURIComponent(path.resolve(basePath,filePath+".md"))
     try {
         fileData=fs.readFileSync(finalPath,'utf8')
-        console.log(fileData,typeof fileData)
     }catch (e) {
         console.log(e)
     }

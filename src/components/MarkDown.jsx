@@ -1,17 +1,18 @@
+"use client"
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import SyntaxHighlighter from 'react-syntax-highlighter'
-function code({className, ...properties}) {
-    const match = /language-(\w+)/.exec(className || '')
-    return match
-        ? <SyntaxHighlighter language={match[1]} PreTag="div" {...properties} />
-        : <code className={className} {...properties} />
-}
-const MarkDown=async ({data})=>{
+import {ForwardRefEditor} from "@/components/ForwardRefEditor";
+export default function MarkDown({data}){
     return(
-        <MDXRemote
-            source={data}
-        />
+        <article className="prose prose-zinc">
+            <ForwardRefEditor
+                readOnly={true}
+                markdown={data}
+                onChange={(data)=>{
+                    console.log(data)
+                }}
+            />
+        </article>
+
     )
 }
-
-export default MarkDown

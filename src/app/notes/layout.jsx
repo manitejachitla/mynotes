@@ -1,23 +1,21 @@
 
 import fs from 'fs'
 import path from 'path'
-import Link from 'next/link'
 import './styles.css'
-import MarkDown from "@/components/MarkDown.jsx";
 import SideBar from "@/components/SideBar";
 const pathname=path.resolve("src/docs")
 let fileData=fs.readFileSync(pathname+"/index.md",'utf8')
 import Head from "next/head";
-const allFileData=[]
+let allFileData=[]
 export const metadata = {
     title: "My Notes2",
     description: "Personal Notes2",
 };
 
-const getDirectoryData=(curr_path)=>{
+const getDirectoryData=async (curr_path)=>{
     let returnObj=[]
     const currPathFiles=fs.readdirSync(curr_path)
-    currPathFiles.forEach(file=>{
+    for await(const file of currPathFiles){
         let next_path=path.join(curr_path,file)
         let fileStats=fs.lstatSync(next_path),isFile=fileStats.isFile()
         returnObj.push({
@@ -26,25 +24,29 @@ const getDirectoryData=(curr_path)=>{
             path:next_path,
             children:isFile?null:getDirectoryData(next_path)
         })
-    })
+    }
 
     return returnObj;
 }
-const getAllFilesData=(curr_path)=>{
+const getAllFilesData=async (curr_path)=>{
     const currPathFiles=fs.readdirSync(curr_path)
-    currPathFiles.forEach(file=>{
+    let returnFiles={}
+    for await(const file of currPathFiles){
         let next_path=path.join(curr_path,file)
         let fileStats=fs.lstatSync(next_path),isFile=fileStats.isFile()
-        allFileData[file]={
+        returnFiles[file]={
             name:file,
             isFile,
-            path:next_path,
-            children:isFile?null:getDirectoryData(next_path)
+            path:path.relative(pathname,next_path),
+            children:isFile?null:await getDirectoryData(next_path)
         }
-    })
+    }
+
+    return returnFiles;
 }
-getAllFilesData(pathname)
-export default function RootLayout({ children }) {
+const files=await getAllFilesData(pathname)
+console.log(files)
+export default async function RootLayout({ children }) {
     return (
         <>
             <Head>
@@ -54,7 +56,11 @@ export default function RootLayout({ children }) {
             </Head>
             <div className="mn_full_page">
                 <div className="file_menu">
-                    <SideBar data={allFileData} basepath={pathname}/>
+                    {
+                        files?(
+                            <SideBar data={files} basepath={pathname}/>
+                        ):""
+                    }
                 </div>
                 {children}
                 <div className="file_links"></div>
