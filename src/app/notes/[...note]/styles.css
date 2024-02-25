@@ -17,3 +17,32 @@
 div [data-lexical-decorator="true"]{
 
 }
+.prose{
+    height: 100%;
+}
+.mdxeditor{
+    height: 100%;
+}
+
+.mdxeditor-root-contenteditable{
+    padding: 20px 10px;
+    height: 100%;
+}
+
+.mdxeditor-root-contenteditable > div:active{
+    border: none;
+}
+.mdxeditor-root-contenteditable > div{
+    border: none;
+    padding: 10px;
+}
+
+.mdxeditor-toolbar,.mdxeditor-toolbar > div{
+    display: flex;
+    align-items: center;
+}
+
+.mdxeditor-toolbar,.mdxeditor-toolbar > div{
+    display: flex;
+    align-items: center;
+}

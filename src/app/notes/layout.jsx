@@ -21,8 +21,8 @@ const getDirectoryData=async (curr_path)=>{
         returnObj.push({
             name:file,
             isFile,
-            path:next_path,
-            children:isFile?null:getDirectoryData(next_path)
+            path:path.relative(pathname,next_path),
+            children:isFile?null:await getDirectoryData(next_path)
         })
     }
 
@@ -45,7 +45,6 @@ const getAllFilesData=async (curr_path)=>{
     return returnFiles;
 }
 const files=await getAllFilesData(pathname)
-console.log(files)
 export default async function RootLayout({ children }) {
     return (
         <>
