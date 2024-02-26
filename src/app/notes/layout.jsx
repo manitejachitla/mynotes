@@ -6,6 +6,7 @@ import SideBar from "@/components/SideBar";
 const pathname=path.resolve("src/docs")
 let fileData=fs.readFileSync(pathname+"/index.md",'utf8')
 import Head from "next/head";
+import Axios from "@/utils/Axios";
 let allFileData=[]
 export const metadata = {
     title: "My Notes2",
@@ -44,7 +45,11 @@ const getAllFilesData=async (curr_path)=>{
 
     return returnFiles;
 }
-const files=await getAllFilesData(pathname)
+const getFiles=async ()=>{
+    const data=await Axios.get('/markdown')
+    return data?.data?.data || []
+}
+const files=await getFiles()
 export default async function RootLayout({ children }) {
     return (
         <>
@@ -62,7 +67,7 @@ export default async function RootLayout({ children }) {
                     }
                 </div>
                 {children}
-                <div className="file_links"></div>
+                {/*<div className="file_links"></div>*/}
             </div>
         </>
     );
